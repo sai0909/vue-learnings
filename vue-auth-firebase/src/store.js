@@ -10,16 +10,18 @@ export default new Vuex.Store({
   state: {
     token: null,
     userId: null,
-    user: null,
-    userEmail: null
+    users: null,
+    userEmail: null,
+   
   },
   getters: {
-    user(state) {
-      return state.user
+    users(state) {
+      return state.users
     },
     isAuthenticated(state) {
       return state.token !== null;
-    }
+    },
+  
   },
   mutations: {
     authUser(state, userData) {
@@ -27,13 +29,15 @@ export default new Vuex.Store({
         state.userId = userData.userId,
         state.userEmail = userData.email
     },
-    storeUser(state, user) {
-      state.user = user
+    storeUser(state, users) {
+      state.users = users
     },
     clearAuthData(state) {
       state.token = null,
         state.userId = null
-    }
+    },
+  
+    
   },
   actions: {
     signup({ commit, dispatch }, authData) {
@@ -55,6 +59,7 @@ export default new Vuex.Store({
         
           localStorage.setItem('token', res.data.idToken)
           localStorage.setItem('userId', res.data.localId)
+          localStorage.setItem('userEmail', res.data.email)
         
           dispatch('storeUser', authData)
           router.push('/')
@@ -79,6 +84,7 @@ export default new Vuex.Store({
 
           localStorage.setItem('token', res.data.idToken)
           localStorage.setItem('userId', res.data.localId)
+          localStorage.setItem('email',res.data.email)
 
           router.push('/')
         })
@@ -88,46 +94,79 @@ export default new Vuex.Store({
       commit('clearAuthData');
       localStorage.removeItem('token')
       localStorage.removeItem('userId')
+      localStorage.removeItem('email')
       router.replace('/login')
     },
     refreshLogin({ commit }) {
       const token = localStorage.getItem('token')
       const userId = localStorage.getItem('userId')
+      const email = localStorage.getItem('email')
       if (!token) {
         console.log('token null')
         return
       }
       commit('authUser', {
         token: token,
-        userId: userId
+        userId: userId,
+        email:email
       })
     },
-    storeUser({ state }, userData) {
-
-      globalAxios.post('/users.json' + '?auth=' + state.token, userData)
+    storeUser({ state }, authData) {
+      
+      globalAxios.post(`users/${state.userId}.json?auth=${state.token}`, authData)
         .then(res => { console.log('storeuser response', res) })
         .catch(error => console.log(error))
+
+       
+    },
+    updateUser({state},userData){
+      
+        globalAxios.patch(`users/${state.userId}/${state.users.id}.json?auth=${state.token}`, userData)
+        .then(res => { console.log('update user response', res) })
+        .catch(error => console.log(error))
+    
     },
     fetchUser({ commit, state }) {
       if (!state.token) {
         return
       }
-      globalAxios.get('/users.json' + '?auth=' + state.token)
+      globalAxios.get(`users/${state.userId}.json?auth=${state.token}`)
         .then(res => {
           const data = res.data
           const users = []
+          let loggedInUser = {}
           console.log('fetching data from axios', data)
           for (let key in data) {
-            console.log(data[key]);
+            
             const user = data[key]
+            console.log('user object from fetch',user.email);
             user.id = key
             users.push(user);
+           if(state.userEmail === user.email){
+             loggedInUser = {...user};
+             console.log('logged in User',loggedInUser)
+           }
           }
           console.log('Displaying users from fetchUser action', users)
-          console.log('users of 0 ', users[0])
-          commit('storeUser', users)
+          commit('storeUser', loggedInUser)
+        
+          
         })
-        .catch(error => console.log(error))
+      // globalAxios
+      //   .get(`users/${state.userId}.json?auth=${state.token}`)
+      //   .then(( {data} ) => {
+
+      //     const users = 
+      //     for (let key in data) {
+            
+      //    const user = data[key]
+      //           console.log('user object from fetch',user)
+      //            this.users = user;
+      //     }
+      //     commit("storeUser", users)
+      //     console.log("fetch data",data);
+      //   })
+      //   .catch(error => console.log(error))
     }
   },
 })

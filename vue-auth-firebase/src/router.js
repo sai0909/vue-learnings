@@ -4,6 +4,8 @@ import Home from './views/Home.vue'
 import Login from './views/Login.vue'
 import Register from './views/Register.vue'
 import store from './store'
+import Layout from './components/Layout/Layout.vue'
+import UpdateProfile from './views/UpdateProfile.vue'
 
 Vue.use(Router)
 
@@ -12,9 +14,21 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/',
-      name: 'dashboard',
-      component: Home,
+      path: '',
+      name: 'Layout',
+      component: Layout,
+      children:[
+        {
+          path:'',
+          name:'Dashboard',
+          component:Home
+        },
+        {
+          path:'/userprofile',
+          name: 'User-Profile',
+          component: UpdateProfile
+        }
+      ],
       beforeEnter(to,from,next){
        
         console.log('from routes',store.state.token);
@@ -25,6 +39,7 @@ export default new Router({
           next('/login')
         }
       }
+
     },
     {
       path: '/login',

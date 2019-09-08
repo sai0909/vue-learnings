@@ -295,7 +295,7 @@ export default {
     confirmPassword: { required, sameAsPassword: sameAs("password") }
   },
   methods: {
-    onSubmit(e) {
+    onSubmit() {
       const formData = {
         fullname: this.fullname,
         role: this.role,

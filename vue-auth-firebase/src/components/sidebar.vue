@@ -9,9 +9,9 @@
           class="img-fluid rounded-circle"
         />
       </div>
-      <div class="title" v-for="user in email" :key=user.id>
-        <h4 v-if="user.email === checkLoginEmail">{{user.fullname}}</h4>
-        <p v-if="user.email === checkLoginEmail">{{user.role}}</p>
+      <div class="title">
+        <h6 class="text-capitalize" v-if="userinfo.email === checkLoginEmail">{{userinfo.fullname}}</h6>
+        <p v-if="userinfo.email === checkLoginEmail">{{userinfo.role}}</p>
       </div>
     </div>
     <!-- Sidebar Navidation Menus-->
@@ -19,16 +19,16 @@
 
     <ul class="list-unstyled">
       <li>
-        <a href="#">
-          <i class="fa fa-user" aria-hidden="true"></i> Update Profile
-        </a>
+        <router-link :to="{name: 'Dashboard'}" active-class="active">
+          <i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard
+        </router-link>
       </li>
       <li>
-        <a href="#">
-          <i class="icon-screen"></i>
-        </a>
+        <router-link :to="{name: 'User-Profile'}" active-class="active">
+          <i class="fa fa-user" aria-hidden="true"></i> Update Profile
+        </router-link>
       </li>
-      <li>  
+      <li>
         <a href="#">
           <i class="icon-mail"></i>
         </a>
@@ -50,8 +50,7 @@ nav.side-navbar {
   -webkit-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
   z-index: 9;
-  position: fixed;
-  min-height: 100%;
+
 }
 
 nav.side-navbar a {
@@ -146,7 +145,6 @@ nav.side-navbar ul li a {
   border-left: 4px solid transparent;
 }
 
-
 nav.side-navbar ul li a:hover {
   background: #796aee;
   border-left: 4px solid #3b25e6;
@@ -158,17 +156,17 @@ nav.side-navbar ul li li a {
   background: #eef5f9;
 }
 
-nav.side-navbar ul li.active > a {
+nav.side-navbar ul li a.router-link-exact-active {
   background: #796aee;
   color: #fff;
   border-left: 4px solid #3b25e6;
 }
 
-nav.side-navbar ul li.active > a:hover {
+nav.side-navbar ul li> a.router-link-exact-active:hover {
   background: #796aee;
 }
 
-nav.side-navbar ul li li.active > a {
+nav.side-navbar ul li li > a.router-link-exact-active {
   background: #8e81f1;
 }
 
@@ -309,26 +307,19 @@ nav.side-navbar.shrinked .sidebar-header .title {
   nav.side-navbar.shrinked {
     margin-left: 0;
   }
-  .content-inner {
-    width: 100%;
-  }
-  .content-inner.active {
-    width: calc(100% - 90px);
-  }
 }
 </style>
 <script>
 export default {
-  data(){
- return {
-        checkLoginEmail: this.$store.state.userEmail
-      }
+  data() {
+    return {
+      checkLoginEmail: this.$store.state.userEmail
+    };
   },
   computed: {
-     email () {
-       return !this.$store.getters.user ? false : this.$store.getters.user
-     }
-   
+    userinfo() {
+      return !this.$store.getters.users ? false : this.$store.getters.users;
+    }
   }
 };
 </script>

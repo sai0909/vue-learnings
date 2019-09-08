@@ -201,7 +201,7 @@
 }
 </style>
 <script>
-import { required, minLength, email, sameAs } from "vuelidate/lib/validators";
+import { required, minLength, email } from "vuelidate/lib/validators";
 export default {
   name: "login",
   components: {},
@@ -222,7 +222,7 @@ export default {
     }
   },
   methods: {
-    onSubmit(e) {
+    onSubmit() {
       const formData = {
         email: this.email,
         password: this.password
