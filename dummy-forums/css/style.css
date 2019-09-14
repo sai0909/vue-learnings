@@ -1,0 +1,40 @@
+.heading {
+	font-size: 26px;
+    font-weight: 300 !important;
+}
+
+.heading a.btn.btn-primary {
+	margin: 6px !important;
+}
+
+#loading-wrapper {
+	position: fixed;
+    top: 50%;
+    background-color: #fff;
+    left: 50%;
+}
+
+#loading-wrapper .fa-spin {
+	font-size: 150px;
+    color: #428bca;
+}
+
+.emotion-list {
+	list-style: none;
+}
+
+.emotion-list li {
+    display: inline-block;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 1px 4px;
+    font-size: 20px;
+    background: #fff;
+    color: #428bca;
+    cursor: pointer;
+}
+
+.btn-load-indicator {
+    color: #ffffff;
+}
